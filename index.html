@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>ScholarAssist</title>
+
+<style>
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #0b1020;
+    color: white;
+}
+
+header {
+    padding: 18px 5%;
+    border-bottom: 1px solid #252f4d;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    font-size: 23px;
+    font-weight: bold;
+}
+
+.logo span {
+    color: #7c9cff;
+}
+
+.container {
+    max-width: 1100px;
+    margin: auto;
+    padding: 40px 20px;
+}
+
+.project-header {
+    background: #121a30;
+    padding: 30px;
+    border-radius: 15px;
+    border: 1px solid #252f4d;
+    margin-bottom: 30px;
+}
+
+.project-header small {
+    color: #8fa8ff;
+}
+
+.project-header h1 {
+    margin: 10px 0;
+    font-size: 30px;
+}
+
+.project-header p {
+    color: #aeb7d0;
+}
+
+.section-title {
+    margin-top: 40px;
+}
+
+.ai-panel {
+    background: #121a30;
+    border: 1px solid #252f4d;
+    padding: 25px;
+    border-radius: 15px;
+    margin-top: 20px;
+}
+
+.ai-panel h2 {
+    margin-top: 0;
+}
+
+.ai-panel p {
+    color: #aeb7d0;
+    line-height: 1.6;
+}
+
+.topic-input {
+    width: 100%;
+    padding: 15px;
+    border-radius: 8px;
+    border: 1px solid #303b5d;
+    background: #0b1020;
+    color: white;
+    font-size: 16px;
+    margin-top: 10px;
+}
+
+.button-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin-top: 15px;
+}
+
+button {
+    padding: 13px;
+    border: none;
+    border-radius: 7px;
+    background: #6f8cff;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+button:hover {
+    opacity: 0.9;
+}
+
+.result {
+    display: none;
+    margin-top: 25px;
+    background: #0b1020;
+    border: 1px solid #303b5d;
+    border-radius: 10px;
+    padding: 20px;
+}
+
+.result h3 {
+    color: #9fb4ff;
+}
+
+.result-content {
+    white-space: pre-line;
+    line-height: 1.8;
+    color: #e1e6f5;
+}
+
+.copy-btn {
+    margin-top: 15px;
+    background: #27365e;
+}
+
+.tools {
+    margin-top: 40px;
+}
+
+.tools-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+}
+
+.tool-card {
+    background: #121a30;
+    border: 1px solid #252f4d;
+    border-radius: 12px;
+    padding: 22px;
+}
+
+.tool-card h3 {
+    margin-top: 0;
+}
+
+.tool-card p {
+    color: #aeb7d0;
+    font-size: 14px;
+}
+
+@media (max-width: 750px) {
+
+    .button-row {
+        grid-template-columns: 1fr;
+    }
+
+    .tools-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .project-header h1 {
+        font-size: 24px;
+    }
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<header>
+
+    <div class="logo">
+        Scholar<span>Assist</span>
+    </div>
+
+    <div>
+        Research Workspace
+    </div>
+
+</header>
+
+
+<main class="container">
+
+
+<section class="project-header">
+
+    <small>ACTIVE RESEARCH PROJECT</small>
+
+    <h1 id="projectTitle">
+        Loading...
+    </h1>
+
+    <p id="projectInfo">
+        Loading project information...
+    </p>
+
+</section>
+
+
+<section class="ai-panel">
+
+    <h2>🤖 Research Assistant</h2>
+
+    <p>
+        Enter a research topic and ScholarAssist will
+        create a structured starting point for your study.
+    </p>
+
+
+    <label>
+        Research Topic
+    </label>
+
+    <input
+        type="text"
+        id="topicInput"
+        class="topic-input"
+        placeholder="Enter your research topic"
+    >
+
+
+    <div class="button-row">
+
+        <button onclick="generateQuestions()">
+            ❓ Research Questions
+        </button>
+
+        <button onclick="generateObjectives()">
+            🎯 Research Objectives
+        </button>
+
+        <button onclick="generateProblem()">
+            📝 Problem Statement
+        </button>
+
+    </div>
+
+
+    <div id="result" class="result">
+
+        <h3 id="resultTitle"></h3>
+
+        <div
+            id="resultContent"
+            class="result-content">
+        </div>
+
+        <button
+            class="copy-btn"
+            onclick="copyResult()">
+            📋 Copy Result
+        </button>
+
+    </div>
+
+</section>
+
+
+<section class="tools">
+
+<h2>Research Tools</h2>
+
+
+<div class="tools-grid">
+
+
+<div class="tool-card">
+
+<h3>📚 Literature Review</h3>
+
+<p>
+Organise theories, concepts and previous
+studies related to your research.
+</p>
+
+</div>
+
+
+<div class="tool-card">
+
+<h3>🔬 Methodology</h3>
+
+<p>
+Plan your research design, population,
+sampling and data collection.
+</p>
+
+</div>
+
+
+<div class="tool-card">
+
+<h3>🔖 References</h3>
+
+<p>
+Organise academic sources and references
+for your research.
+</p>
+
+</div>
+
+
+</div>
+
+</section>
+
+
+</main>
+
+
+<script>
+
+
+/* LOAD PROJECT */
+
+const savedProject =
+    JSON.parse(
+        localStorage.getItem(
+            "scholarAssistProject"
+        )
+    );
+
+
+if (savedProject) {
+
+    document.getElementById(
+        "projectTitle"
+    ).textContent =
+        savedProject.topic;
+
+
+    document.getElementById(
+        "projectInfo"
+    ).textContent =
+        savedProject.level +
+        " • " +
+        savedProject.department +
+        " • " +
+        savedProject.institution +
+        " • " +
+        savedProject.reference;
+
+
+    document.getElementById(
+        "topicInput"
+    ).value =
+        savedProject.topic;
+
+}
+
+
+/* RESULT DISPLAY */
+
+function showResult(title, content) {
+
+    document.getElementById(
+        "resultTitle"
+    ).textContent = title;
+
+
+    document.getElementById(
+        "resultContent"
+    ).textContent = content;
+
+
+    document.getElementById(
+        "result"
+    ).style.display = "block";
+
+}
+
+
+/* RESEARCH QUESTIONS */
+
+function generateQuestions() {
+
+    const topic =
+        document.getElementById(
+            "topicInput"
+        ).value.trim();
+
+
+    if (!topic) {
+
+        alert(
+            "Please enter a research topic first."
+        );
+
+        return;
+    }
+
+
+    const result =
+
+`1. What are the major factors associated with ${topic}?
+
+2. What is the nature and extent of ${topic}?
+
+3. What effects does ${topic} have on the target population?
+
+4. What challenges are associated with ${topic}?
+
+5. What strategies can be adopted to address the challenges associated with ${topic}?`;
+
+
+    showResult(
+        "Suggested Research Questions",
+        result
+    );
+
+}
+
+
+/* OBJECTIVES */
+
+function generateObjectives() {
+
+    const topic =
+        document.getElementById(
+            "topicInput"
+        ).value.trim();
+
+
+    if (!topic) {
+
+        alert(
+            "Please enter a research topic first."
+        );
+
+        return;
+    }
+
+
+    const result =
+
+`The general objective of this study is to examine ${topic}.
+
+Specifically, the study seeks to:
+
+1. Examine the major factors associated with ${topic}.
+
+2. Investigate the nature and extent of ${topic}.
+
+3. Examine the effects of ${topic} on the target population.
+
+4. Identify the challenges associated with ${topic}.
+
+5. Suggest possible strategies for addressing the identified challenges.`;
+
+
+    showResult(
+        "Suggested Research Objectives",
+        result
+    );
+
+}
+
+
+/* PROBLEM STATEMENT */
+
+function generateProblem() {
+
+    const topic =
+        document.getElementById(
+            "topicInput"
+        ).value.trim();
+
+
+    if (!topic) {
+
+        alert(
+            "Please enter a research topic first."
+        );
+
+        return;
+    }
+
+
+    const result =
+
+`This study focuses on ${topic}.
+
+The problem addressed by the study arises from the need to understand the current situation surrounding the subject, the factors influencing it, its effects on the target population and the challenges associated with it.
+
+Despite existing discussions on the subject, important questions may remain concerning the nature, extent, effects and possible solutions relating to ${topic}.
+
+This study therefore seeks to investigate the subject systematically and provide findings that may contribute to a better understanding of the issue.`;
+
+
+    showResult(
+        "Problem Statement Framework",
+        result
+    );
+
+}
+
+
+/* COPY */
+
+function copyResult() {
+
+    const content =
+        document.getElementById(
+            "resultContent"
+        ).innerText;
+
+
+    navigator.clipboard.writeText(content);
+
+
+    alert(
+        "Result copied to clipboard."
+    );
+
+}
+
+</script>
+
+
+</body>
+
+</html>
