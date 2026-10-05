@@ -406,7 +406,6 @@ async function generateQuestions() {
             "topicInput"
         ).value.trim();
 
-
     if (!topic) {
 
         alert(
@@ -416,10 +415,41 @@ async function generateQuestions() {
         return;
     }
 
+    // Load the student's saved project information
+    const savedProject =
+        JSON.parse(
+            localStorage.getItem(
+                "scholarAssistProject"
+            )
+        ) || {};
+
+    const academicLevel =
+        savedProject.academicLevel ||
+        "Not specified";
+
+    const discipline =
+        savedProject.discipline ||
+        savedProject.department ||
+        "Not specified";
+
+    const institution =
+        savedProject.institution ||
+        "Not specified";
+
+    const referencingStyle =
+        savedProject.referencingStyle ||
+        savedProject.referenceStyle ||
+        "Not specified";
+
+    const researchDescription =
+        savedProject.description ||
+        savedProject.brief ||
+        "Not specified";
+
 
     showResult(
         "Suggested Research Questions",
-        "ScholarAssist is thinking..."
+        "ScholarAssist is analysing your research project..."
     );
 
 
@@ -428,35 +458,55 @@ async function generateQuestions() {
         const prompt = `
 You are ScholarAssist, an academic research assistant.
 
-Generate 5 strong, clear, specific and researchable research questions based on the following research topic:
+Develop five strong and researchable research questions for the research project below.
 
-"${topic}"
+RESEARCH TOPIC:
+${topic}
 
-Requirements:
-1. Make every question directly relevant to the topic.
-2. Make the questions suitable for an undergraduate academic research project.
-3. Avoid vague or repetitive questions.
-4. Make the questions logically connected to the topic.
-5. Do not invent sources or citations.
-6. Return ONLY the five numbered research questions.
+ACADEMIC LEVEL:
+${academicLevel}
+
+DEPARTMENT / DISCIPLINE:
+${discipline}
+
+INSTITUTION:
+${institution}
+
+REFERENCING STYLE:
+${referencingStyle}
+
+RESEARCH DESCRIPTION:
+${researchDescription}
+
+INSTRUCTIONS:
+
+1. Make every research question directly relevant to the research topic.
+2. Consider the academic level and discipline when formulating the questions.
+3. Ensure the questions are specific, clear and researchable.
+4. Avoid vague, overly broad or repetitive questions.
+5. Ensure the questions cover meaningful dimensions of the research problem.
+6. Make the questions suitable for an academic research project.
+7. Do not invent sources, statistics or citations.
+8. Do not provide explanations.
+9. Return ONLY five numbered research questions.
 `;
 
+        const response =
+            await fetch(
+                "/api/generate",
+                {
+                    method: "POST",
 
-        const response = await fetch(
-            "/api/generate",
-            {
-                method: "POST",
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    },
 
-                headers: {
-                    "Content-Type":
-                        "application/json"
-                },
-
-                body: JSON.stringify({
-                    prompt: prompt
-                })
-            }
-        );
+                    body: JSON.stringify({
+                        prompt: prompt
+                    })
+                }
+            );
 
 
         const data =
